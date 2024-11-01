@@ -2,12 +2,12 @@ const CACHE_NAME = 'nmamit-cache-v1';
 const urlsToCache = [
     './',
     './index.html',
-    './favicon.ico',
-    './apple-touch-icon.png',
-    './android-chrome-192x192.png',
-    './android-chrome-512x512.png',
-    './site.webmanifest',
-    // Add other assets like CSS, JS, images, etc.
+    './img/favicon.ico',
+    './img/apple-touch-icon.png',
+    './img/android-chrome-192x192.png',
+    './img/android-chrome-512x512.png',
+    './img/logo.png',
+    './site.webmanifest'
 ];
 
 self.addEventListener('install', (event) => {
@@ -20,23 +20,40 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Skip chrome-extension requests
+    if (event.request.url.startsWith('chrome-extension://')) {
+        return;
+    }
+
     event.respondWith(
-        fetch(event.request, { redirect: 'follow' }).then((response) => {
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-            }
+        caches.match(event.request)
+            .then((response) => {
+                // Cache hit - return response
+                if (response) {
+                    return response;
+                }
 
-            const responseToCache = response.clone();
+                return fetch(event.request).then(
+                    (response) => {
+                        // Check if we received a valid response
+                        if (!response || response.status !== 200 || response.type !== 'basic') {
+                            return response;
+                        }
 
-            caches.open(CACHE_NAME)
-                .then((cache) => {
-                    cache.put(event.request, responseToCache);
-                });
+                        // Clone the response
+                        const responseToCache = response.clone();
 
-            return response;
-        }).catch(() => {
-            return caches.match(event.request);
-        })
+                        caches.open(CACHE_NAME)
+                            .then((cache) => {
+                                if (event.request.url.startsWith('http')) {
+                                    cache.put(event.request, responseToCache);
+                                }
+                            });
+
+                        return response;
+                    }
+                );
+            })
     );
 });
 
