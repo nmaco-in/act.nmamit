@@ -356,42 +356,66 @@
             display: none;
             background: none;
             border: none;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
             color: #333;
-            padding: 5px 10px;
-            margin-right: 10px;
+            padding: 5px;
             position: absolute;
-            right: 20px;
-            top: 20px;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1002;
+        }
+
+        nav {
+            position: relative;
+            width: 100%;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
 
         @media (max-width: 768px) {
             .header-content {
-                flex-wrap: wrap;
+                padding: 10px 0;
                 position: relative;
             }
-            .mobile-menu-toggle {
-                display: block;
+            
+            nav {
+                width: 100%;
+                margin-top: 0;
             }
+            
             nav ul {
                 display: none;
-                width: 100%;
-                flex-direction: column;
-                background-color: #fff;
                 position: absolute;
                 top: 100%;
                 left: 0;
-                padding: 20px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                z-index: 1000;
+                width: 100%;
+                background-color: #fff;
+                padding: 10px 0;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                z-index: 1001;
+                transform: none;
+                opacity: 1;
             }
+            
             nav ul.show {
-                display: flex;
+                display: block;
             }
+            
             nav ul li {
-                margin: 10px 0;
-                text-align: center;
+                margin: 0;
+                padding: 10px 20px;
+                text-align: left;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
             }
         }
 
@@ -943,24 +967,28 @@
             }, 100);
         }
 
-        // Add hover effect for download buttons
+        // Replace the existing hover effect code with this updated version
         document.querySelectorAll('.download-button').forEach(button => {
-            button.addEventListener('mouseover', () => {
-                const icon = button.querySelector('.download-icon');
-                icon.style.transform = 'translateY(-5px)';
-            });
+            const icon = button.querySelector('.download-icon');
             
-            button.addEventListener('mouseout', () => {
-                const icon = button.querySelector('.download-icon');
-                icon.style.transform = 'translateY(0)';
-            });
+            // Only add hover effects if the button has an icon
+            if (icon) {
+                button.addEventListener('mouseover', () => {
+                    icon.style.transform = 'translateY(-5px)';
+                });
+                
+                button.addEventListener('mouseout', () => {
+                    icon.style.transform = 'translateY(0)';
+                });
+            }
         });
 
         // Mobile menu toggle with animation
         const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
         const navMenu = document.querySelector('nav ul');
 
-        mobileMenuToggle.addEventListener('click', () => {
+        mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
             mobileMenuToggle.classList.toggle('active');
             navMenu.classList.toggle('show');
             mobileMenuToggle.setAttribute('aria-expanded', navMenu.classList.contains('show'));
@@ -973,6 +1001,11 @@
                 navMenu.classList.remove('show');
                 mobileMenuToggle.setAttribute('aria-expanded', 'false');
             }
+        });
+
+        // Prevent menu from closing when clicking inside nav
+        navMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
 
         // Add hover effect for cards
