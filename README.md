@@ -49,9 +49,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For inquiries, please contact the ACT branch at:
-- **Phone**: +91 – 8258 – 281263
-- **Email**: [principal_nmamit@nitte.edu.in](mailto:principal_nmamit@nitte.edu.in)
+- **Email**: [mail2nmaco@gmail.com](mailto:mail2nmaco@gmail.com)
 
 ---
 
-Made by [R3AP3R editz](https://wa.me/919481594558) 
+Made by [R3AP3R editz](https://github.com/iotserver24) 
